@@ -1,0 +1,103 @@
+#include <stdio.h>
+#define MAX_SIZE 5
+
+int circularQueue[MAX_SIZE];
+int front = -1, rear = -1;
+
+int isFull() {
+    return (front == 0 && rear == MAX_SIZE - 1) || (front == rear + 1);
+}
+
+int isEmpty() {
+    return front == -1;
+}
+
+void enqueue(int data) {
+    if (isFull()) {
+        printf("Queue Overflow: Cannot add more elements.\n");
+    } else {
+        if (front == -1) {
+            front = 0;
+        }
+        rear = (rear + 1) % MAX_SIZE;
+        circularQueue[rear] = data;
+        printf("%d enqueued to the queue.\n", data);
+    }
+}
+
+void dequeue() {
+    if (isEmpty()) {
+        printf("Queue Underflow: Cannot dequeue from an empty queue.\n");
+    } else {
+        printf("%d dequeued from the queue.\n", circularQueue[front]);
+        if (front == rear) {
+            front = rear = -1; // Reset queue when it becomes empty
+        } else {
+            front = (front + 1) % MAX_SIZE;
+        }
+    }
+}
+
+void display() {
+    if (isEmpty()) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Queue elements: ");
+        int i = front;
+        do {
+            printf("%d ", circularQueue[i]);
+            i = (i + 1) % MAX_SIZE;
+        } while (i != (rear + 1) % MAX_SIZE);
+        printf("\n");
+    }
+}
+
+int main() {
+    int choice, data;
+    do {
+        printf("Circular Queue Operations:\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Is Empty\n");
+        printf("4. Is Full\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1:
+                printf("Enter the element to insert: ");
+                scanf("%d", &data);
+                enqueue(data);
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                if (isEmpty()) {
+                    printf("Queue is empty.\n");
+                } else {
+                    printf("Queue is not empty.\n");
+                }
+                break;
+            case 4:
+                if (isFull()) {
+                    printf("Queue is full.\n");
+                } else {
+                    printf("Queue is not full.\n");
+                }
+                break;
+            case 5:
+                display();
+                break;
+            case 6:
+                printf("Exiting the program. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice! Please enter a valid option.\n");
+        }
+    } while(choice != 6);
+    
+    return 0;
+}
+
